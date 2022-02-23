@@ -31,9 +31,6 @@ class Atendimento {
         if(existemErros){
            res.status(400).json(erros) 
         }else{
-
-            
-            
             const atendimentoDatado = {...atendimento, dataCriacao, data}
             const sql = 'INSERT INTO Atendimentos SET ?'
             
@@ -46,7 +43,29 @@ class Atendimento {
             })
         }
     }
+    lista(res){
+        const sql= 'SELECT * FROM Atendimentos';
 
+        conexao.query(sql, (erro, resultados) => {
+            if(erro) {
+                res.status(400).json();
+            }else {
+                res.status(200).json(resultados);
+            }
+        });
+    }
+    buscaporId(id, res){
+        const sql = `SELECT * FROM Atendimentos WHERE id=${id}`;
+        conexao.query(sql, (erro, resultados) => {
+            const atendimento = resultados[0];
+            if(erro) {
+              res.status(400).json(erro); 
+            }else {
+                res.status(200).json(atendimento);
+            }
+        
+        });
+    }
 }
 
 module.exports = new Atendimento;
